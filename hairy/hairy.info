@@ -1,0 +1,6 @@
+name = Hairy
+description = A demonstration theme for Mustache.
+package = Core
+version = VERSION
+core = 7.x
+engine = mustache

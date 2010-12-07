@@ -1,0 +1,56 @@
+{{%UNESCAPED}}
+{{%DOT-NOTATION}}
+  <div id="page-wrapper"><div id="page">
+
+    <div id="header"><div class="section clearfix">
+
+      {{#logo}}
+        <a href="{{front_page}}" title="{{#t}}Home{{/t}}" rel="home" id="logo">
+          <img src="{{logo}}" alt="{{#t}}Home{{/t}}" />
+        </a>
+      {{/logo}}
+
+      {{#drupal_render}}page.header{{/drupal_render}}
+
+    </div></div> <!-- /.section, /#header -->
+
+    {{#breadcrumb}}
+      <div id="breadcrumb">{{breadcrumb}}</div>
+    {{/breadcrumb}}
+
+    {{messages}}
+
+    <div id="main-wrapper"><div id="main" class="clearfix">
+
+      <div id="content" class="column"><div class="section">
+        {{#page.highlighted}}<div id="highlighted">{{#drupal_render}}page.highlighted{{/drupal_render}}</div>{{/page.highlighted}}
+        <a id="main-content"></a>
+        {{#drupal_render}}title_prefix{{/drupal_render}}
+        {{#title}}<h1 class="title" id="page-title">{{title}}</h1>{{/title}}
+        {{#drupal_render}}title_suffix{{/drupal_render}}
+        {{#tabs}}<div class="tabs">{{#drupal_render}}tabs{{/drupal_render}}</div>{{/tabs}}
+        {{#drupal_render}}page.help{{/drupal_render}}
+        {{#action_links}}<ul class="action-links">{{#drupal_render}}action_links{{/drupal_render}}</ul>{{/action_links}}
+        {{#drupal_render}}page.content{{/drupal_render}}
+        {{feed_icons}}
+      </div></div> <!-- /.section, /#content -->
+
+      {{#page.sidebar_first}}
+        <div id="sidebar-first" class="column sidebar"><div class="section">
+          {{#drupal_render}}page.sidebar_first{{/drupal_render}}
+        </div></div> <!-- /.section, /#sidebar-first -->
+      {{/page.sidebar_first}}
+
+      {{#page.sidebar_second}}
+        <div id="sidebar-second" class="column sidebar"><div class="section">
+          {{#drupal_render}}page.sidebar_second{{/drupal_render}}
+        </div></div> <!-- /.section, /#sidebar-second -->
+      {{/page.sidebar_second}}
+
+    </div></div> <!-- /#main, /#main-wrapper -->
+
+    <div id="footer"><div class="section">
+      {{#drupal_render}}page.footer{{/drupal_render}}
+    </div></div> <!-- /.section, /#footer -->
+
+  </div></div> <!-- /#page, /#page-wrapper -->

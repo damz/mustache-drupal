@@ -1,0 +1,99 @@
+<?php
+
+require_once dirname(__FILE__) . '/mustache.php/Mustache.php';
+
+/**
+ * Implements hook_init().
+ */
+function mustache_init($template) {
+  $file = dirname($template->filename) . '/template.php';
+  if (file_exists($file)) {
+    include_once DRUPAL_ROOT . '/' . $file;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function mustache_theme($existing, $type, $theme, $path) {
+  // We still need those.
+  $templates = drupal_find_theme_functions($existing, array($theme));
+
+  // Discover mustache templates.
+  $templates += drupal_find_theme_templates($existing, '.mustache', $path);
+
+  return $templates;
+}
+
+/**
+ * Implements THEME_ENGINE_render_template().
+ */
+function mustache_render_template($template_file, $variables) {
+  $m = new DrupalMustache($variables);
+  return $m->render(file_get_contents($template_file));
+}
+
+/**
+ * Implements THEME_ENGINE_extension().
+ */
+function mustache_extension() {
+  return '.mustache';
+}
+
+/**
+ * Drupal-specific extensions to Mustache.
+ */
+class DrupalMustache extends Mustache {
+  var $variables = array();
+
+  public function __construct($variables) {
+    $this->variables = $variables;
+
+    // Shortcuts to Drupal rendering functions.
+    $this->variables['drupal_render'] = array($this, '_render');
+    $this->variables['show'] = array($this, '_show');
+    $this->variables['hide'] = array($this, '_hide');
+    $this->variables['t'] = array($this, 't');
+  }
+
+  public function __get($key) {
+    return isset($this->variables[$key]) ? $this->variables[$key] : NULL;
+  }
+
+  public function __isset($key) {
+    return isset($this->variables[$key]);
+  }
+
+  // Shortcuts to Drupal rendering functions.
+
+  // This is basically drupal_array_get_nested_value() returning a reference.
+  public function &_drupal_array_get_nested_value(array &$array, array $parents, &$key_exists = NULL) {
+    $ref = &$array;
+    foreach ($parents as $parent) {
+      if (is_array($ref) && array_key_exists($parent, $ref)) {
+        $ref = &$ref[$parent];
+      }
+      else {
+        $key_exists = FALSE;
+        return NULL;
+      }
+    }
+    $key_exists = TRUE;
+    return $ref;
+  }
+
+  public function _render($element) {
+    $array = &$this->_drupal_array_get_nested_value($this->variables, explode('.', $element));
+    return render($array);
+  }
+
+  public function _show($element) {
+    $array = &$this->_drupal_array_get_nested_value($this->variables, explode('.', $element));
+    return show($array);
+  }
+
+  public function _hide($element) {
+    $array = &$this->_drupal_array_get_nested_value($this->variables, explode('.', $element));
+    return hide($array);
+  }
+}

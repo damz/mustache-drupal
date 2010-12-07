@@ -1,0 +1,3 @@
+[submodule "mustache.php"]
+	path = mustache.php
+	url = https://github.com/damz/mustache.php.git
